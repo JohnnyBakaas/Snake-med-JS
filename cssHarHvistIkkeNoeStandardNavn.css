@@ -1,0 +1,40 @@
+* {
+  margin: 0;
+  padding: 0;
+  border: solid black 1px;
+}
+
+.square {
+  width: 50px;
+  height: 50px;
+}
+
+.snake-head {
+  background-color: green;
+}
+
+.apple {
+  background-color: red;
+}
+
+.snake-body {
+  background-color: rgb(20, 61, 20);
+}
+
+#board {
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+}
+
+.row {
+  display: flex;
+}
+
+.thomas {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
