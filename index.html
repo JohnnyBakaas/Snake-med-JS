@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="cssHarHvistIkkeNoeStandardNavn.css" />
   </head>
-  <body>
+  <body id="the-body">
     <div class="thomas">
       <h1>Snake</h1>
 
@@ -18,6 +18,13 @@
         <div>Hvilken størrelse vil du ha på brettet ditt?</div>
         <input type="number" id="boardsize-input" value="10" />
         <button id="boardsize-comit">Start</button>
+      </div>
+      <div>
+        <button onclick="left()">Venstre</button>
+        <button onclick="down()">V</button>
+        <button onclick="up()">A</button>
+        <button onclick="right()">Høyre</button>
+        <button onclick="newTick()">Next tick</button>
       </div>
     </div>
     <script src="main.js" async defer></script>
