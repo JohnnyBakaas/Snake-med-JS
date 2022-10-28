@@ -7,7 +7,9 @@ const keyCodeA = 65;
 const keyCodeS = 83;
 const keyCodeD = 68;
 
-let tickRate = 1000;
+let tickrate = 200;
+
+let ingame = false;
 
 const isSamePosition = (p1, p2) => p1.x === p2.x && p1.y === p2.y;
 
@@ -50,11 +52,11 @@ const spawnApple = () => {
   const x = Math.floor(Math.random() * board.cols);
   const y = Math.floor(Math.random() * board.cols);
   if (isSamePosition(snake.snakeHead, { x, y })) {
-    spawnApple();
+    return spawnApple();
   }
-  for (let i = 0; i < snake.bodyparts.size; i++) {
+  for (let i = 0; i < snake.bodyparts.length; i++) {
     if (isSamePosition(snake.bodyparts[i], { x, y })) {
-      spawnApple();
+      return spawnApple();
     }
   }
 
@@ -70,7 +72,8 @@ const newSnakeBodyPartSavePosition = () => {
 
   //Fuck it!
   const arr = [];
-  for (let i = 0; i < snake.bodyparts.slice - 1; i--) {
+  for (let i = 0; i < snake.bodyparts.length - 1; i++) {
+    console.log("loop", i);
     arr.push(snake.bodyparts[i]);
   }
   //const obj = { x: 0, y: 0 };
@@ -78,13 +81,28 @@ const newSnakeBodyPartSavePosition = () => {
   console.log(snake.bodyparts);
 };
 const newSnakeBodyParLoadPosition = () => {
-  snake.bodyparts.push("{ x: storedPositionX, y: storedPositionY }");
+  snake.bodyparts.push({ x: storedPositionX, y: storedPositionY });
 };
 //position new bodypart end
 
 //get WASD from user
 
-document.onkeydown;
+const keyPressedHandler = (e) => {
+  switch (e.key) {
+    case "ArrowLeft":
+      left();
+      break;
+    case "ArrowRight":
+      right();
+      break;
+    case "ArrowUp":
+      up();
+      break;
+    case "ArrowDown":
+      down();
+      break;
+  }
+};
 
 //start up \/
 const getSize = () => {
@@ -95,12 +113,16 @@ const getSize = () => {
 
 const startGame = () => {
   getSize();
-
+  ingame = true;
   snake.snakeHead.x = parseInt(board.cols / 2);
   snake.snakeHead.y = parseInt(board.cols / 2);
 
   //spawn board must be last
   new boardView("board").drawBoard();
+  if (ingame) {
+    console.log("funger plz");
+    setInterval(newTick, tickrate);
+  }
 };
 
 const newTick = () => {
@@ -108,9 +130,10 @@ const newTick = () => {
   moveSnakeBodyparts();
   moveSnakeHead();
   if (appleEatenCheck()) {
+    //TODO: sjekk at du ikke har vunnet dipshit
     spawnApple();
     new boardView("board").drawBoard();
-    newSnakeBodyParLoadPosition;
+    newSnakeBodyParLoadPosition();
   } else {
     new boardView("board").drawBoard();
   }
@@ -153,7 +176,7 @@ const snake = {
 };
 
 const apple = {
-  position: { x: 6, y: 9 },
+  position: { x: 1, y: 1 },
 };
 
 //_________________________________________________________
@@ -214,3 +237,5 @@ function boardView(boardId) {
 new boardView("board").drawBoard();
 
 let asdf = [];
+
+window.addEventListener("keydown", keyPressedHandler);

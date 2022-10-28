@@ -38,3 +38,8 @@
   align-items: center;
   flex-direction: column;
 }
+
+.largebutton {
+  height: 100px;
+  width: 100px;
+}
