@@ -14,7 +14,7 @@ const isSamePosition = (p1, p2) => p1.x === p2.x && p1.y === p2.y;
 //Controller
 
 let velocity = {
-  x: 0,
+  x: 1,
   y: 0,
 };
 
@@ -66,17 +66,10 @@ let storedPositionY = undefined;
 const newSnakeBodyPartSavePosition = () => {
   storedPositionX = snake.bodyparts[snake.bodyparts.length - 1].x;
   storedPositionY = snake.bodyparts[snake.bodyparts.length - 1].y;
-
-  //Fuck it!
-  const arr = [];
-  for (let i = 0; i < snake.bodyparts.length - 1; i++) {
-    arr.push(snake.bodyparts[i]);
-  }
 };
 const newSnakeBodyParLoadPosition = () => {
   snake.bodyparts.push({ x: storedPositionX, y: storedPositionY });
 };
-//position new bodypart end
 
 //get input from user
 
@@ -159,10 +152,14 @@ const left = () => {
 //game over check
 
 const checkBorderGameOver = () => {
-  for (let i = 0; i < board.rows; i++) {
-    if (snake.snakeHead.x == board.rows || snake.snakeHead.y == board.cols) {
-      gameOver = true;
-    }
+  if (
+    snake.snakeHead.x == board.rows ||
+    snake.snakeHead.y == board.cols ||
+    snake.snakeHead.x == -1 ||
+    snake.snakeHead.y == -1
+  ) {
+    gameOver = true;
+    console.log("out of bounds");
   }
 };
 
@@ -170,6 +167,7 @@ const checkCannibalismGameOver = () => {
   for (let i = 0; i < snake.bodyparts.length; i++) {
     if (isSamePosition(snake.snakeHead, snake.bodyparts[i])) {
       gameOver = true;
+      console.log("cannibalism");
     }
   }
 };
