@@ -6,6 +6,8 @@ let tickrate = 200;
 
 let ingame = false;
 
+let gameOver = false;
+
 const isSamePosition = (p1, p2) => p1.x === p2.x && p1.y === p2.y;
 
 //_________________________________________________________
@@ -68,19 +70,15 @@ const newSnakeBodyPartSavePosition = () => {
   //Fuck it!
   const arr = [];
   for (let i = 0; i < snake.bodyparts.length - 1; i++) {
-    console.log("loop", i);
     arr.push(snake.bodyparts[i]);
   }
-  //const obj = { x: 0, y: 0 };
-  //arr.push(obj);
-  console.log(snake.bodyparts);
 };
 const newSnakeBodyParLoadPosition = () => {
   snake.bodyparts.push({ x: storedPositionX, y: storedPositionY });
 };
 //position new bodypart end
 
-//get WASD from user
+//get input from user
 
 const keyPressedHandler = (e) => {
   switch (e.key) {
@@ -109,13 +107,14 @@ const getSize = () => {
 const startGame = () => {
   getSize();
   ingame = true;
+  gameOver = false;
   snake.snakeHead.x = parseInt(board.cols / 2);
   snake.snakeHead.y = parseInt(board.cols / 2);
+  spawnApple();
 
   //spawn board must be last
   new boardView("board").drawBoard();
   if (ingame) {
-    console.log("funger plz");
     setInterval(newTick, tickrate);
   }
 };
@@ -124,6 +123,8 @@ const newTick = () => {
   newSnakeBodyPartSavePosition();
   moveSnakeBodyparts();
   moveSnakeHead();
+  checkBorderGameOver();
+  checkCannibalismGameOver();
   if (appleEatenCheck()) {
     //TODO: sjekk at du ikke har vunnet dipshit
     spawnApple();
@@ -132,9 +133,12 @@ const newTick = () => {
   } else {
     new boardView("board").drawBoard();
   }
+  if (gameOver) {
+    gameOverScreen("board");
+  }
 };
 
-//experimental
+//movement function
 const up = () => {
   velocity.y = -1;
   velocity.x = 0;
@@ -150,6 +154,24 @@ const right = () => {
 const left = () => {
   velocity.x = -1;
   velocity.y = 0;
+};
+
+//game over check
+
+const checkBorderGameOver = () => {
+  for (let i = 0; i < board.rows; i++) {
+    if (snake.snakeHead.x == board.rows || snake.snakeHead.y == board.cols) {
+      gameOver = true;
+    }
+  }
+};
+
+const checkCannibalismGameOver = () => {
+  for (let i = 0; i < snake.bodyparts.length; i++) {
+    if (isSamePosition(snake.snakeHead, snake.bodyparts[i])) {
+      gameOver = true;
+    }
+  }
 };
 
 //experimental
@@ -176,6 +198,11 @@ const apple = {
 
 //_________________________________________________________
 //View
+
+const gameOverScreen = (boardId) => {
+  const boardElement = document.getElementById(boardId);
+  boardElement.innerHTML = "Game OVER";
+};
 
 function boardView(boardId) {
   const boardElement = document.getElementById(boardId);
