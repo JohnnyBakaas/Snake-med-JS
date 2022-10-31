@@ -2,11 +2,6 @@
 //y er horisontalt, "i" i en dobel loop
 //Globals
 
-const keyCodeW = 87;
-const keyCodeA = 65;
-const keyCodeS = 83;
-const keyCodeD = 68;
-
 let tickrate = 200;
 
 let ingame = false;
